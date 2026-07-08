@@ -1,0 +1,139 @@
+{
+  "reference": {
+    "method": "DOP853",
+    "rtol": 1e-12,
+    "atol": 1e-12,
+    "tau_star": 2.6225672472444437,
+    "xi_at_halt": 0.9999960950399729,
+    "event_fired": false,
+    "overshoot_past_1": false,
+    "any_nonfinite": false,
+    "min_gap": 3.904960027112381e-06,
+    "halt_message": "Required step size is less than spacing between numbers."
+  },
+  "rk4_stepstudy": {
+    "case": {
+      "alpha": 0.2,
+      "beta": 0.1,
+      "zeta": 0.5
+    },
+    "valid_interval_end": 2.5701159022995546,
+    "n_overshoot": 6,
+    "all_overshoot_pole": true,
+    "rows": [
+      {
+        "h": 0.05,
+        "overshoot": true,
+        "nan": false,
+        "xi_max_finite": 166.19722823524853,
+        "linf_xi_valid": 7.599782182354797e-05,
+        "tau_PI_est": 2.601211417151905,
+        "tau_PI_err": 0.021355830092538497,
+        "n_steps": 84
+      },
+      {
+        "h": 0.02,
+        "overshoot": true,
+        "nan": false,
+        "xi_max_finite": 46.34029240954755,
+        "linf_xi_valid": 4.1812243875005706e-06,
+        "tau_PI_est": 2.6216342611612404,
+        "tau_PI_err": 0.0009329860832032466,
+        "n_steps": 210
+      },
+      {
+        "h": 0.01,
+        "overshoot": true,
+        "nan": false,
+        "xi_max_finite": 4056.924415106786,
+        "linf_xi_valid": 5.119619200799619e-07,
+        "tau_PI_est": 2.620021478121516,
+        "tau_PI_err": 0.002545769122927588,
+        "n_steps": 420
+      },
+      {
+        "h": 0.005,
+        "overshoot": true,
+        "nan": false,
+        "xi_max_finite": 142.07720745439937,
+        "linf_xi_valid": 3.2804717498002844e-08,
+        "tau_PI_est": 2.620568626244696,
+        "tau_PI_err": 0.001998620999747569,
+        "n_steps": 840
+      },
+      {
+        "h": 0.002,
+        "overshoot": true,
+        "nan": false,
+        "xi_max_finite": 2530.181170955507,
+        "linf_xi_valid": 8.457644584680679e-10,
+        "tau_PI_est": 2.622018518707661,
+        "tau_PI_err": 0.0005487285367826722,
+        "n_steps": 2099
+      },
+      {
+        "h": 0.001,
+        "overshoot": true,
+        "nan": false,
+        "xi_max_finite": 177.14682727978214,
+        "linf_xi_valid": 5.269773506455522e-11,
+        "tau_PI_est": 2.6222369448013625,
+        "tau_PI_err": 0.0003303024430811874,
+        "n_steps": 4197
+      }
+    ]
+  },
+  "pinn": {
+    "stable": {
+      "params": {
+        "alpha": 0.05,
+        "beta": 0.0001,
+        "zeta": 0.6
+      },
+      "xi_ref_max": 0.06044852178705395,
+      "linf_xi_overall": 0.0010540096282539227,
+      "l2_xi_overall": 0.00034993830645345793,
+      "linf_xi_regular": 0.0010540096282539227,
+      "l2_xi_regular": 0.00034993830645345793,
+      "linf_xi_near": null,
+      "l2_xi_near": null,
+      "linf_xidot_overall": 0.0007764595799649819,
+      "l2_xidot_overall": 0.00022384182907209699,
+      "linf_xidot_near": null
+    },
+    "growing": {
+      "params": {
+        "alpha": 0.072421875,
+        "beta": 0.0407373046875,
+        "zeta": 1.0
+      },
+      "xi_ref_max": 0.29186836153664364,
+      "linf_xi_overall": 0.001948926943405982,
+      "l2_xi_overall": 0.001061080419879501,
+      "linf_xi_regular": 0.001948926943405982,
+      "l2_xi_regular": 0.001061080419879501,
+      "linf_xi_near": null,
+      "l2_xi_near": null,
+      "linf_xidot_overall": 0.0010842837107097117,
+      "l2_xidot_overall": 0.0004146488738923997,
+      "linf_xidot_near": null
+    },
+    "pullin": {
+      "params": {
+        "alpha": 0.2,
+        "beta": 0.1,
+        "zeta": 0.5
+      },
+      "xi_ref_max": 0.742354754869016,
+      "linf_xi_overall": 0.00283048890775206,
+      "l2_xi_overall": 0.000561536427492704,
+      "linf_xi_regular": 0.0008517058364799213,
+      "l2_xi_regular": 0.00032048124904019847,
+      "linf_xi_near": 0.00283048890775206,
+      "l2_xi_near": 0.0014941241625466056,
+      "linf_xidot_overall": 0.033801816907198745,
+      "l2_xidot_overall": 0.0033237316875950884,
+      "linf_xidot_near": 0.033801816907198745
+    }
+  }
+}

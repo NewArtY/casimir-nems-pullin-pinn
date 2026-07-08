@@ -1,0 +1,63 @@
+{
+  "seed": 42,
+  "potential_identity": {
+    "passed": true,
+    "max_abs_err": 7.2658323801988445e-09
+  },
+  "cases": [
+    {
+      "name": "stable",
+      "params": {
+        "alpha": 0.05,
+        "beta": 0.0001,
+        "zeta": 0.6,
+        "xi0": 0.0,
+        "v0": 0.0,
+        "t_max": 60.0,
+        "dt": 0.001
+      },
+      "regime": "stable",
+      "pull_in": false,
+      "tau_pullin": null,
+      "max_xi": 0.06044852223037827,
+      "escaped": false,
+      "n_steps": 60000
+    },
+    {
+      "name": "growing",
+      "params": {
+        "alpha": 0.072421875,
+        "beta": 0.0407373046875,
+        "zeta": 1.0,
+        "xi0": 0.0,
+        "v0": 0.0,
+        "t_max": 30.0,
+        "dt": 0.001
+      },
+      "regime": "growing",
+      "pull_in": false,
+      "tau_pullin": null,
+      "max_xi": 0.2918683615366474,
+      "escaped": false,
+      "n_steps": 30000
+    },
+    {
+      "name": "pullin",
+      "params": {
+        "alpha": 0.2,
+        "beta": 0.1,
+        "zeta": 0.5,
+        "xi0": 0.0,
+        "v0": 0.0,
+        "t_max": 60.0,
+        "dt": 0.001
+      },
+      "regime": "pullin",
+      "pull_in": true,
+      "tau_pullin": 2.6222369392167972,
+      "max_xi": 0.999999,
+      "escaped": false,
+      "n_steps": 2623
+    }
+  ]
+}

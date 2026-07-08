@@ -1,0 +1,63 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite both the software archive and the associated article below."
+title: "Casimir-Electrostatic NEMS Pull-In: Bifurcation, Phase Diagrams & Physics-Informed Neural Networks"
+abstract: >-
+  Reproducible computational archive for the study of the pull-in instability of
+  a Casimir-electrostatic nano-electromechanical (NEMS) oscillator. It derives the
+  closed-form saddle-node (fold) bifurcation of the pull-in boundary, maps the
+  dynamic pull-in phase diagram by deterministic Runge-Kutta integration, trains
+  physics-informed neural networks (PINNs) that solve the governing ODE including a
+  pull-in-safe rapidity parametrization for the movable pole and a parametric PINN
+  that learns the fold boundary from the force-balance residual, and computes the
+  finite-temperature Lifshitz shift of the pull-in voltage.
+type: software
+version: "1.0.0"
+date-released: "2026-07-08"
+license: MIT
+keywords:
+  - Casimir effect
+  - NEMS
+  - pull-in instability
+  - physics-informed neural network
+  - bifurcation
+  - Lifshitz theory
+authors:
+  - family-names: Akintsov
+    given-names: N. S.
+    orcid: "https://orcid.org/0000-0002-1040-1292"
+    affiliation: "School of Artificial Intelligence and Computer Science, Nantong University, Nantong 226019, China"
+  - family-names: Nevecheria
+    given-names: A. P.
+    orcid: "https://orcid.org/0000-0001-6736-4691"
+    affiliation: "Department of Mathematical and Computer Methods, Kuban State University, Krasnodar 350040, Russia"
+  - family-names: Andreev
+    given-names: S. N.
+    orcid: "https://orcid.org/0000-0003-3588-2894"
+    affiliation: "Department of Radiophotonics, Research Center for Telecommunications, Moscow Institute of Physics and Technology (National Research University), Dolgoprudny 141701, Russia"
+  - family-names: Qin
+    given-names: Qing-Hua
+    orcid: "https://orcid.org/0000-0003-0948-784X"
+    affiliation: "Institute of Advanced Interdisciplinary Technology, Shenzhen MSU-BIT University, Shenzhen 518172, China"
+preferred-citation:
+  type: article
+  title: "Casimir-Electrostatic Pull-In Bifurcation in Nonlinear Nanomechanical Oscillators: Phase Diagrams and Physics-Informed Neural-Network Solutions with Relativistic Lifshitz Corrections"
+  year: 2026
+  journal: "Physical Review Applied"
+  notes: "In preparation."
+  authors:
+    - family-names: Akintsov
+      given-names: N. S.
+      orcid: "https://orcid.org/0000-0002-1040-1292"
+      affiliation: "School of Artificial Intelligence and Computer Science, Nantong University, Nantong 226019, China"
+    - family-names: Nevecheria
+      given-names: A. P.
+      orcid: "https://orcid.org/0000-0001-6736-4691"
+      affiliation: "Department of Mathematical and Computer Methods, Kuban State University, Krasnodar 350040, Russia"
+    - family-names: Andreev
+      given-names: S. N.
+      orcid: "https://orcid.org/0000-0003-3588-2894"
+      affiliation: "Department of Radiophotonics, Research Center for Telecommunications, Moscow Institute of Physics and Technology (National Research University), Dolgoprudny 141701, Russia"
+    - family-names: Qin
+      given-names: Qing-Hua
+      orcid: "https://orcid.org/0000-0003-0948-784X"
+      affiliation: "Institute of Advanced Interdisciplinary Technology, Shenzhen MSU-BIT University, Shenzhen 518172, China"

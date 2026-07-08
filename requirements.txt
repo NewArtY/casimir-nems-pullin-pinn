@@ -1,0 +1,24 @@
+# Reproducibility contract for the Casimir-electrostatic NEMS pull-in study.
+#
+# These are the EXACT versions used to produce every artefact in results/,
+# models/, logs/ and figures/.  Python 3.13 is required.
+#
+#   Python 3.13.2  (CPython, 64-bit)
+#
+# PyTorch is CPU-ONLY (build tag "+cpu"): no CUDA is used anywhere in this
+# project and torch.cuda.is_available() is False on the reference machine.
+# Install the CPU wheel explicitly, e.g.
+#
+#   pip install torch==2.12.0 --index-url https://download.pytorch.org/whl/cpu
+#   pip install -r requirements.txt
+#
+# All runs are deterministic on CPU float64 with the fixed master seed 42
+# (see SEEDS.md and src/config.py).
+
+torch==2.12.0        # CPU-only build (2.12.0+cpu)
+numpy==2.4.4
+scipy==1.17.1
+matplotlib==3.10.9
+
+# --- optional, only for validating the metadata files (not needed at runtime) ---
+# PyYAML==6.0.3      # to parse/validate CITATION.cff

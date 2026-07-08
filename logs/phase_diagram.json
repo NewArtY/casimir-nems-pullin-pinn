@@ -1,0 +1,50 @@
+{
+  "grid": {
+    "n_alpha": 200,
+    "n_beta": 200,
+    "alpha_range": [
+      0.0,
+      0.2
+    ],
+    "beta_range": [
+      0.0,
+      0.09
+    ]
+  },
+  "integration": {
+    "dt": 0.005,
+    "t_max": 200.0,
+    "eps_barrier": 1e-06,
+    "escape_low": -1e-09
+  },
+  "zeta_primary": 0.1,
+  "zeta_compare": 0.7,
+  "crosscheck": {
+    "pull_in_match": true,
+    "max_dtau": 8.615330671091215e-14,
+    "max_dxi": 0.0
+  },
+  "fold_endpoints": {
+    "alpha_c_beta0": 0.14814814814814814,
+    "beta_star": 0.08192
+  },
+  "summary_primary": {
+    "fraction_pullin_dynamic": 0.7343,
+    "fraction_pullin_static": 0.681275,
+    "tau_pullin_min": 2.1702503350230598,
+    "tau_pullin_max": 15.750536735789105,
+    "mean_alpha_gap": 0.011712408194820256,
+    "median_alpha_gap": 0.012060301507537688,
+    "max_alpha_gap": 0.01407035175879398,
+    "n_boundary_rows": 182,
+    "overshoot_cell_fraction": 0.053025,
+    "n_escaped": 0
+  },
+  "summary_compare": {
+    "fraction_pullin_dynamic": 0.680975,
+    "mean_alpha_gap": -6.626539289855877e-05
+  },
+  "wall_clock_s": 91.40177029999904,
+  "integration_time_primary_s": 38.420395499968436,
+  "integration_time_compare_s": 48.02672070002882
+}

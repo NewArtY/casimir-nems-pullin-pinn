@@ -1,0 +1,80 @@
+{
+  "option": "1 (equilibrium surrogate with fold tangency, pure-residual PINN)",
+  "wall_time_train_s": 78.46071863174438,
+  "network": {
+    "width": 64,
+    "depth": 3,
+    "params_in": 2,
+    "collocation": 8100,
+    "adam_iters": 4000,
+    "lbfgs_iters": 300
+  },
+  "final_residual_loss": 1.6921238553552916e-07,
+  "metrics": {
+    "u_field_rmse": 0.0030977349035290805,
+    "u_field_max_abs": 0.12606904378964667,
+    "boundary_mean_abs_dalpha": 7.949236283710917e-08,
+    "boundary_max_abs_dalpha": 3.4545590549273086e-07,
+    "boundary_mean_dalpha_rel_pct": 5.3657344915048696e-05,
+    "alpha_c_beta0_pinn": 0.1481478026922427,
+    "alpha_c_beta0_ref": 0.14814814814814814,
+    "alpha_c_beta0_abs_err": 3.454559054372197e-07,
+    "beta_c_alpha0_pinn": 0.08191996608641311,
+    "beta_c_alpha0_ref": 0.08192,
+    "beta_c_alpha0_abs_err": 3.3913586897083015e-08,
+    "grid_acc_vs_static_pct": 100.0,
+    "grid_acc_vs_rk4_pct": 94.6975,
+    "grid_static_vs_rk4_baseline_pct": 94.6975
+  },
+  "history": {
+    "step": [
+      0,
+      500,
+      1000,
+      1500,
+      2000,
+      2500,
+      3000,
+      3500,
+      3999,
+      4329
+    ],
+    "phase": [
+      "adam",
+      "adam",
+      "adam",
+      "adam",
+      "adam",
+      "adam",
+      "adam",
+      "adam",
+      "adam",
+      "lbfgs"
+    ],
+    "L_res": [
+      0.05131868936200451,
+      1.099909076161898e-05,
+      5.516555374300089e-06,
+      3.791696877573539e-06,
+      3.1237705567977348e-06,
+      2.4565167859922118e-06,
+      1.9777269925833743e-06,
+      1.7665401517674402e-06,
+      1.7311770018299643e-06,
+      1.6921238553552916e-07
+    ],
+    "elapsed": [
+      0.026755332946777344,
+      8.778883218765259,
+      20.54288148880005,
+      29.840483903884888,
+      38.21492290496826,
+      46.75225591659546,
+      55.10160565376282,
+      63.418339252471924,
+      71.7281084060669,
+      78.46069645881653
+    ],
+    "wall_time": 78.46071863174438
+  }
+}

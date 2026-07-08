@@ -8,11 +8,18 @@ __pycache__/
 *.egg-info/
 build/
 dist/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
 
 # --- Virtual environments ---
 .venv/
 venv/
 env/
+
+# --- Secrets / local env ---
+.env
+.env.*
 
 # --- PyCharm / JetBrains ---
 .idea/
@@ -25,6 +32,17 @@ env/
 Thumbs.db
 desktop.ini
 
+# --- Editor swap/backup files ---
+*.swp
+*.swo
+*~
+*.bak
+*.orig
+
 # --- Logs / temp ---
 *.log
 *.tmp
+
+# NOTE: results/, logs/, models/, figures/ ARE tracked on purpose —
+# this is a reproducible computational archive (see README), not a
+# throwaway output directory.

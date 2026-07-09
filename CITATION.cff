@@ -13,6 +13,11 @@ abstract: >-
 type: software
 version: "1.0.0"
 date-released: "2026-07-08"
+doi: "10.5281/zenodo.21269555"
+identifiers:
+  - type: doi
+    value: "10.5281/zenodo.21269555"
+    description: "DOI for the software and data archive on Zenodo."
 license: MIT
 keywords:
   - Casimir effect
@@ -40,7 +45,7 @@ authors:
     affiliation: "Institute of Advanced Interdisciplinary Technology, Shenzhen MSU-BIT University, Shenzhen 518172, China"
 preferred-citation:
   type: article
-  title: "Casimir-Electrostatic Pull-In Bifurcation in Nonlinear Nanomechanical Oscillators: Phase Diagrams and Physics-Informed Neural-Network Solutions with Relativistic Lifshitz Corrections"
+  title: "Casimir-Electrostatic Pull-In in Nanomechanical Actuators: Phase Diagrams, Design Sensitivities, and Physics-Informed Neural-Network Surrogates"
   year: 2026
   journal: "Physical Review Applied"
   notes: "In preparation."

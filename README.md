@@ -163,7 +163,7 @@ code/
 ├── results/              # .npz / .csv / .json numerical outputs
 ├── models/               # trained PINN weights (*.pth)
 ├── logs/                 # training / provenance logs (*.json)
-└── figures/              # publication figures fig1..fig4 (PDF + PNG)
+└── figures/              # publication figures fig1..fig6 (PDF + PNG)
 ```
 
 ## Hardware & runtime
@@ -192,16 +192,15 @@ archive.
 **Article (in preparation):**
 
 > N. S. Akintsov, A. P. Nevecheria, S. N. Andreev, and Q.-H. Qin,
-> "Casimir–Electrostatic Pull-In Bifurcation in Nonlinear Nanomechanical
-> Oscillators: Phase Diagrams and Physics-Informed Neural-Network Solutions with
-> Relativistic Lifshitz Corrections," *Physical Review Applied* (in preparation,
-> 2026).
+> "Casimir–Electrostatic Pull-In in Nanomechanical Actuators: Phase Diagrams,
+> Design Sensitivities, and Physics-Informed Neural-Network Surrogates,"
+> *Physical Review Applied* (in preparation, 2026).
 
 **Software archive (this repository):**
 
 > N. S. Akintsov, A. P. Nevecheria, S. N. Andreev, and Q.-H. Qin,
 > "Casimir–Electrostatic NEMS Pull-In: Bifurcation, Phase Diagrams &
 > Physics-Informed Neural Networks" (Version 1.0.0), Zenodo (2026).
-> DOI: `10.5281/zenodo.XXXXXXX`  *(placeholder — replaced with the minted DOI on deposit).*
+> DOI: [10.5281/zenodo.21269555](https://doi.org/10.5281/zenodo.21269555).
 
 A machine-readable citation is provided in `CITATION.cff`.

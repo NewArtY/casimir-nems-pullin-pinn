@@ -1,15 +1,21 @@
 # Changelog
 
 All notable changes to this archive. Versions follow the Zenodo releases of
-the record `10.5281/zenodo.21269555` (concept DOI); each release carries its
-own version DOI.
+the record `10.5281/zenodo.21269554` (concept DOI, resolves to the
+latest version); each release carries its own version DOI.
+
+| version | date | version DOI |
+| :-- | :-- | :-- |
+| 1.1.0 | 2026-08-28 | `10.5281/zenodo.22142711` |
+| 1.0.0 | 2026-07-09 | `10.5281/zenodo.21269555` |
 
 ## 1.1.0 - 2026-08-26
 
-`.zenodo.json` keeps the concept DOI `10.5281/zenodo.21269555`. Zenodo mints a
-separate version DOI when 1.1.0 is published; update `.zenodo.json`,
-`CITATION.cff`, `README.md`, and the `Zenodo2026` entry of `article/refs.bib`
-with that version DOI after release.
+Published 2026-08-28 as `10.5281/zenodo.22142711`. Note that
+`10.5281/zenodo.21269555`, used as the concept DOI before this release, is in
+fact the version DOI of 1.0.0; the concept DOI is `10.5281/zenodo.21269554`.
+The manuscript now cites the 1.1.0 version DOI, since that is the archive its
+numbers come from.
 
 ### Fixed
 

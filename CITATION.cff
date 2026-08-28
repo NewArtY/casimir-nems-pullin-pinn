@@ -13,11 +13,14 @@ abstract: >-
 type: software
 version: "1.1.0"
 date-released: "2026-08-26"
-doi: "10.5281/zenodo.21269555"
+doi: "10.5281/zenodo.22142711"
 identifiers:
   - type: doi
-    value: "10.5281/zenodo.21269555"
-    description: "DOI for the software and data archive on Zenodo."
+    value: "10.5281/zenodo.22142711"
+    description: "Version DOI of release 1.1.0."
+  - type: doi
+    value: "10.5281/zenodo.21269554"
+    description: "Concept DOI; resolves to the latest version."
 license: MIT
 keywords:
   - Casimir effect

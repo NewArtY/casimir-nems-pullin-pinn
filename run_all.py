@@ -76,13 +76,16 @@ STAGES = [
     ("phase",       "src.phase_diagram",      "run",  "Pull-in phase diagram (vectorised RK4 sweep)"),
     ("lifshitz",    "src.lifshitz_boundary",  "main", "Thermal (Lifshitz) fold-boundary shift"),
     ("pinn_bnd",    "src.pinn_boundary",      "main", "Parametric physics-informed pull-in boundary"),
+    ("pullin_ref",  "src.pullin_reference",   "main", "Adaptive reference through to the barrier (Fig. 1c)"),
     ("figures",     "src.make_figures",       "main", "Render publication figures (Fig. 1-4)"),
+    ("band_scan",   "src.band_scan",          "main", "Band width vs damping, Table S8 (SLOW ~3 min)"),
+    ("app_checks",  "src.appendix_checks",    "main", "Numerical checks of Appendix B (SLOW ~5 min)"),
     ("inverse",     "src.inverse_design",     "main", "Inverse design + autodiff sensitivities (Fig. 5)"),
     ("dyn_bnd",     "src.dynamic_boundary_design", "run", "No-closed-form dynamic-boundary sensitivity (Fig. 6, SLOW ~2-3 min)"),
 ]
 
 # Stages that are quick (used by --skip-training which drops 'training').
-SLOW_STAGES = {"training", "dyn_bnd"}
+SLOW_STAGES = {"training", "dyn_bnd", "app_checks", "band_scan"}
 
 
 def _banner(idx, total, name, desc):

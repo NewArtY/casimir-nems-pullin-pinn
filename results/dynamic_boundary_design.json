@@ -10,7 +10,7 @@
     "eps_barrier": 1e-06,
     "alpha_bisection_tol": 1e-06,
     "fd_h": 0.0025,
-    "wall_time_s": 147.60947259998647,
+    "wall_time_s": 267.795880000107,
     "static_fold_closed_form": "alpha_c(u)=u^2(4-5u)/2, beta_c(u)=u^4(3u-2)/2",
     "dalpha_c_dbeta_static_closed_form": "-1/u^2",
     "dynamic_boundary_has_closed_form": false,
@@ -173,44 +173,44 @@
     "width": 32,
     "depth": 2,
     "output_scale": 0.15,
-    "fit_rmse_alpha": 0.00014600248706130684
+    "fit_rmse_alpha": 0.000146002487061305
   },
   "sensitivities": [
     {
       "beta": 0.01,
-      "alpha_dyn_surrogate": 0.11324028319911983,
-      "dalpha_dyn_dbeta_surrogate": -2.0562518801144667,
+      "alpha_dyn_surrogate": 0.11324028319911973,
+      "dalpha_dyn_dbeta_surrogate": -2.0562518801144676,
       "dalpha_dyn_dbeta_rk4_fd": -2.054443359375002,
       "fd_h": 0.0025,
       "fd_alpha_plus": 0.10791282653808593,
       "fd_alpha_minus": 0.11818504333496094,
-      "rel_err": 0.0008802972012889436
+      "rel_err": 0.000880297201289376
     },
     {
       "beta": 0.03,
-      "alpha_dyn_surrogate": 0.07464893678347098,
-      "dalpha_dyn_dbeta_surrogate": -1.795709995520468,
+      "alpha_dyn_surrogate": 0.07464893678347086,
+      "dalpha_dyn_dbeta_surrogate": -1.7957099955204685,
       "dalpha_dyn_dbeta_rk4_fd": -1.7955017089843817,
       "fd_h": 0.0025,
       "fd_alpha_plus": 0.07034721374511718,
       "fd_alpha_minus": 0.07932472229003909,
-      "rel_err": 0.00011600464374061548
+      "rel_err": 0.00011600464374086283
     },
     {
       "beta": 0.05,
-      "alpha_dyn_surrogate": 0.04056766874951248,
-      "dalpha_dyn_dbeta_surrogate": -1.6407623642397635,
+      "alpha_dyn_surrogate": 0.04056766874951234,
+      "dalpha_dyn_dbeta_surrogate": -1.6407623642397646,
       "dalpha_dyn_dbeta_rk4_fd": -1.6490173339843788,
       "fd_h": 0.0025,
       "fd_alpha_plus": 0.03636817932128906,
       "fd_alpha_minus": 0.04461326599121095,
-      "rel_err": 0.00500599331158605
+      "rel_err": 0.005005993311585377
     }
   ],
   "validation": {
-    "fit_rmse_alpha": 0.00014600248706130684,
+    "fit_rmse_alpha": 0.000146002487061305,
     "fit_rmse_below_1e-3": true,
-    "max_sensitivity_rel_err": 0.00500599331158605,
+    "max_sensitivity_rel_err": 0.005005993311585377,
     "sensitivity_rel_err_below_10pct": true,
     "ROBUST": true
   }

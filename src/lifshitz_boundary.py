@@ -13,7 +13,7 @@ with u = 1 - xi_PI the dimensionless gap at pull-in.
 Finite temperature multiplies the Casimir term by the leading Lifshitz factor
 [1 + kappa T (1 - xi)] with the *instantaneous* gap (d - x) = d (1 - xi):
 
-    kappa(d) = (720 zeta(3) / pi^3) * k_B d / (hbar c)     [1/K] ,
+    kappa(d) = (60 zeta(3) / pi^3) * k_B d / (hbar c)      [1/K] ,
 
 so the thermal net force is
 
@@ -59,11 +59,11 @@ else:
 # ---------------------------------------------------------------------------
 # Thermal prefactor kappa(d)
 # ---------------------------------------------------------------------------
-PREFAC = 720.0 * config.ZETA3 / np.pi ** 3          # = 27.913...
+PREFAC = 60.0 * config.ZETA3 / np.pi ** 3           # = 2.3261...  (see Appendix A)
 
 
 def kappa(d):
-    """Thermal Casimir coefficient kappa(d) = (720 zeta3/pi^3) k_B d/(hbar c) [1/K].
+    """Thermal Casimir coefficient kappa(d) = (60 zeta3/pi^3) k_B d/(hbar c) [1/K].
 
     kappa T is the dimensionless strength of the leading Lifshitz correction at
     the rest gap; the correction to the Casimir term is [1 + kappa T (1-xi)].

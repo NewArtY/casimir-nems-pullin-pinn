@@ -16,8 +16,17 @@ The leading finite-temperature Lifshitz correction multiplies **only** the
 Casimir pressure by `[1 + kappa T (1 - xi)]`, evaluated at the *instantaneous*
 gap:
 
-    kappa(d) = (720 zeta(3) / pi^3) * k_B d / (hbar c)   [1/K],
-    720 zeta(3)/pi^3 = 27.913 ,   zeta(3) = 1.2020569 .
+    kappa(d) = (60 zeta(3) / pi^3) * k_B d / (hbar c)   [1/K],
+    60 zeta(3)/pi^3 = 2.3261 ,   zeta(3) = 1.2020569 .
+
+The coefficient is the ratio of the classical (high-T) Casimir pressure
+P_cl = zeta(3) k_B T/(4 pi a^3) to the zero-temperature pressure
+P_0 = pi^2 hbar c/(240 a^4); the derivation is Appendix A of the manuscript
+(`article/sections/appendix_lifshitz.tex`). An earlier version of these notes
+used 720 zeta(3)/pi^3 = 27.913, which is too large by exactly 12: it divided
+the classical term by the FREE-ENERGY coefficient 720 instead of the pressure
+coefficient 240, and dropped the factor 4 in P_cl. All numbers below were
+regenerated after the fix.
 
 Hence the thermal net force
 
@@ -30,8 +39,8 @@ electrostatic `^{-2}` and the Casimir `^{-4}` terms:
 
     beta[1+kappa T(1-xi)]/(1-xi)^4  =  beta/(1-xi)^4  +  beta kappa T/(1-xi)^3 .
 
-At `d = 100 nm`: `k_B/(hbar c) = 436.70 m^-1 K^-1`, `kappa = 1.2190e-3 /K`,
-so `kappa T = 0.1219` (100 K) and `0.3657` (300 K).
+At `d = 100 nm`: `k_B/(hbar c) = 436.70 m^-1 K^-1`, `kappa = 1.0158e-4 /K`,
+so `kappa T = 0.010158` (100 K) and `0.030474` (300 K).
 
 The correction is exactly `physics.beta_lifshitz(beta, xi, T, d)/(1-xi)^4`;
 `net_force_T` and the RK4 integrator therefore use the identical Casimir
@@ -92,9 +101,9 @@ Boundary intercepts:
 
 | T (K) | kappa*T | beta* (alpha=0) | alpha_c at beta=0.03 |
 |------:|--------:|----------------:|---------------------:|
-|     0 | 0.0000  | 0.081907        | 0.087627 |
-|   100 | 0.1219  | 0.074623        | 0.082660 |
-|   300 | 0.3657  | 0.063412        | 0.072771 |
+|     0 | 0.000000 | 0.081907       | 0.087627 |
+|   100 | 0.010158 | 0.081257       | 0.087213 |
+|   300 | 0.030474 | 0.079914       | 0.086384 |
 
 Shift at fixed **beta = 0.03** (relevant Fig. 3 operating line), and the
 Casimir-axis intercept `beta*` shift. Voltage mapping uses `alpha ~ V^2`, i.e.
@@ -129,28 +138,31 @@ Casimir term, at the probe point `alpha = 0.99 * alpha_c(T=0, beta=0.03) =
 This confirms the static-fold shift has the correct sign and magnitude: warming
 the device pulls in an operating point that was stable cold.
 
-## 5. Honest discussion of magnitude — two different length scales
+## 5. Honest discussion of magnitude - two different length scales
 
-The per-cent shift at 100 nm is set by `kappa T` (0.12 at 100 K, 0.37 at
-300 K), **not** by the bare thermal wavelength
+The per-cent shift at 100 nm is set by `kappa T` (0.0102 at 100 K, 0.0305 at
+300 K), and the thermal wavelength is
 
     lambda_T = hbar c / (k_B T) = 7.633 um at 300 K.
 
-These are different scales and must not be conflated. `lambda_T` (microns) is
-the wavelength at which the *full* Lifshitz crossover from the T=0 to the
-classical high-T Casimir regime occurs; our gap `d = 100 nm << lambda_T`, so we
-are deep in the low-T (quantum) regime where only the **leading** thermal
-correction matters. That leading term carries the large numerical prefactor
-`720 zeta(3)/pi^3 = 27.913`, which shifts the "per-cent" onset to a much
-smaller gap:
+With the corrected prefactor the two scales are consistent with each other.
+The linear form doubles the Casimir pressure at
 
-    d_onset = lambda_T / 27.913 = 273.5 nm  (at 300 K),
+    a = lambda_T / 2.3261 = 3.28 um  (at 300 K),
 
-i.e. `kappa T = d / d_onset`. At `d = 100 nm` this gives
-`kappa T(300 K) = 100/273.5 = 0.366`, consistent with the table. So even though
-`d/lambda_T ~ 1.3 %` looks negligible, the 27.9 prefactor amplifies it to a
-~17 % shift in `alpha_c` (~9 % in pull-in voltage) at beta=0.03 — a genuinely
-measurable, sign-definite thermal destabilisation of the NEMS pull-in
-boundary. The correction is linear in both `T` and `d`, so it grows toward the
-`d ~ 270 nm` scale and would need the full Lifshitz kernel (not just the
-leading term) as `d` approaches `lambda_T`.
+i.e. at 0.43 lambda_T, so the quantum-to-classical crossover sits at the
+thermal wavelength, as it must. The old prefactor 27.913 put that crossover at
+273 nm = 0.036 lambda_T, which contradicted the premise that lambda_T is the
+crossover scale; that inconsistency is what exposed the error.
+
+At `d = 100 nm` the linear form gives `kappa T (1 - xi) = 0.76 %` (100 K) and
+`2.29 %` (300 K) at the pull-in gap, hence a `-0.24 %` / `-0.71 %` shift in
+`V_PI` at beta = 0.03 and a `-0.8 %` / `-2.4 %` shift in `beta*`. These remain
+UPPER BOUNDS and not predictions: at `d << lambda_T` the ideal-mirror thermal
+correction to the pressure is
+
+    P(a,T) = P_0(a) [1 + (16/3) (a/lambda_T)^4] ,
+
+with no linear term at all (Appendix A of the manuscript). That is `1.6e-7` at
+100 nm and 300 K, seven orders of magnitude below the linear estimate. The
+linear form becomes the physical answer only as `a` approaches `lambda_T`.

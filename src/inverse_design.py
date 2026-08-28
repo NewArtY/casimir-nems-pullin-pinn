@@ -87,6 +87,10 @@ C_LIGHT = config.C_LIGHT
 DEV_A = dict(A_um2=100.0, d_nm=100.0, k=0.5)   # A = 100 um^2, d = 100 nm, k = 0.5 N/m
 DEV_A_SI = dict(A=100.0e-12, d=100.0e-9, k=0.5)
 
+# Device B (the sub-100 nm NEMS of Table I): twice the Casimir loading.
+DEV_B = dict(A_um2=25.0, d_nm=50.0, k=2.0)     # A = 25 um^2, d = 50 nm, k = 2 N/m
+DEV_B_SI = dict(A=25.0e-12, d=50.0e-9, k=2.0)
+
 
 # ===========================================================================
 # Load the trained surrogate
@@ -261,11 +265,26 @@ def demo_sensitivities(net):
             "rel_err": float(rel),
         })
 
-    # --- (1b) V_PI geometry sensitivities for device A ---------------------
-    print("\n  (1b) pull-in-voltage geometry sensitivities (device A)")
-    d = torch.tensor(DEV_A_SI["d"], dtype=DTYPE, requires_grad=True)
-    A = torch.tensor(DEV_A_SI["A"], dtype=DTYPE, requires_grad=True)
-    k = torch.tensor(DEV_A_SI["k"], dtype=DTYPE, requires_grad=True)
+    # --- (1b) V_PI geometry sensitivities, at two devices ------------------
+    return {
+        "dalpha_c_dbeta": dadb_rows,
+        "V_PI_sensitivities": _vpi_block(net, DEV_A_SI, DEV_A, "A"),
+        "V_PI_sensitivities_deviceB": _vpi_block(net, DEV_B_SI, DEV_B, "B"),
+    }
+
+
+def _vpi_block(net, dev_si, dev, label):
+    """Autograd elasticities at one operating point, against the analytic
+    pipeline.
+
+    Device A sits at beta = 0.026 and device B at beta = 0.052, which is 63%
+    of the Casimir ceiling, so the pair brackets the loading of the tabulated
+    devices and exercises the surrogate where the fold is steepest.
+    """
+    print(f"\n  (1b) pull-in-voltage geometry sensitivities (device {label})")
+    d = torch.tensor(dev_si["d"], dtype=DTYPE, requires_grad=True)
+    A = torch.tensor(dev_si["A"], dtype=DTYPE, requires_grad=True)
+    k = torch.tensor(dev_si["k"], dtype=DTYPE, requires_grad=True)
     V = V_PI_surrogate(net, d, A, k)
     gd, gA, gk = torch.autograd.grad(V, [d, A, k])
     sur = {"V_PI": float(V.detach()), "dV_dd": float(gd),
@@ -276,7 +295,7 @@ def demo_sensitivities(net):
         h = rel * abs(x)
         return (fn(x + h) - fn(x - h)) / (2.0 * h)
 
-    d0, A0, k0 = DEV_A_SI["d"], DEV_A_SI["A"], DEV_A_SI["k"]
+    d0, A0, k0 = dev_si["d"], dev_si["A"], dev_si["k"]
     an = {
         "V_PI": V_PI_analytic(d0, A0, k0),
         "dV_dd": fd(lambda x: V_PI_analytic(x, A0, k0), d0),
@@ -305,14 +324,14 @@ def demo_sensitivities(net):
         }
 
     return {
-        "dalpha_c_dbeta": dadb_rows,
-        "V_PI_sensitivities": {
-            "V_PI_surrogate_V": sur["V_PI"],
-            "V_PI_analytic_V": an["V_PI"],
-            "operating_point": {"A_um2": DEV_A["A_um2"], "d_nm": DEV_A["d_nm"],
-                                "k_N_per_m": DEV_A["k"], "beta": DEV_A_beta()},
-            "components": vpi_rows,
+        "V_PI_surrogate_V": sur["V_PI"],
+        "V_PI_analytic_V": an["V_PI"],
+        "operating_point": {
+            "A_um2": dev["A_um2"], "d_nm": dev["d_nm"], "k_N_per_m": dev["k"],
+            "beta": float(beta_of_geometry(dev_si["A"], dev_si["d"],
+                                           dev_si["k"])),
         },
+        "components": vpi_rows,
     }
 
 

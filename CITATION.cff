@@ -11,8 +11,8 @@ abstract: >-
   that learns the fold boundary from the force-balance residual, and computes the
   finite-temperature Lifshitz shift of the pull-in voltage.
 type: software
-version: "1.0.0"
-date-released: "2026-07-08"
+version: "1.1.0"
+date-released: "2026-08-26"
 doi: "10.5281/zenodo.21269555"
 identifiers:
   - type: doi
@@ -38,7 +38,7 @@ authors:
   - family-names: Andreev
     given-names: S. N.
     orcid: "https://orcid.org/0000-0003-3588-2894"
-    affiliation: "Department of Radiophotonics, Research Center for Telecommunications, Moscow Institute of Physics and Technology (National Research University), Dolgoprudny 141701, Russia"
+    affiliation: 'Joint-Stock Company "Center for Research and Development", Moscow 101000, Russia'
   - family-names: Qin
     given-names: Qing-Hua
     orcid: "https://orcid.org/0000-0003-0948-784X"
@@ -61,7 +61,7 @@ preferred-citation:
     - family-names: Andreev
       given-names: S. N.
       orcid: "https://orcid.org/0000-0003-3588-2894"
-      affiliation: "Department of Radiophotonics, Research Center for Telecommunications, Moscow Institute of Physics and Technology (National Research University), Dolgoprudny 141701, Russia"
+      affiliation: 'Joint-Stock Company "Center for Research and Development", Moscow 101000, Russia'
     - family-names: Qin
       given-names: Qing-Hua
       orcid: "https://orcid.org/0000-0003-0948-784X"

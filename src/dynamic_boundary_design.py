@@ -290,7 +290,8 @@ def run():
     print(f"    VERDICT: {'ROBUST' if robust else 'NOT ROBUST'}")
 
     # -- (5) figure (optional) -----------------------------------------------
-    fig_paths = _make_figure(beta_grid, alpha_dyn, alpha_static, net)
+    fig_paths = _make_figure(beta_grid, alpha_dyn, alpha_static, net,
+                             sens_rows)
 
     # -- (6) save JSON -------------------------------------------------------
     wall = time.perf_counter() - t_wall0
@@ -351,7 +352,10 @@ def run():
     return payload
 
 
-def _make_figure(beta_grid, alpha_dyn, alpha_static, net):
+def _make_figure(beta_grid, alpha_dyn, alpha_static, net, sens_rows):
+    """(a) the two boundaries and the band between them; (b) the design
+    sensitivity dalpha_dyn/dbeta the section actually claims, surrogate autograd
+    against the independent RK4 central finite difference."""
     try:
         import matplotlib
         matplotlib.use("Agg")
@@ -369,21 +373,92 @@ def _make_figure(beta_grid, alpha_dyn, alpha_static, net):
     bb = np.linspace(beta_grid.min(), beta_grid.max(), 400)
     with torch.no_grad():
         a_fit = net(torch.as_tensor(bb, dtype=DTYPE)).cpu().numpy()
+    # continuous autograd slope of the surrogate over the same window; the net
+    # is elementwise in beta, so grad of the sum gives the per-point derivative
+    b_req = torch.as_tensor(bb, dtype=DTYPE).requires_grad_(True)
+    (dadb,) = torch.autograd.grad(net(b_req).sum(), b_req)
+    dadb = dadb.detach().cpu().numpy()
 
-    fig, ax = plt.subplots(1, 1, figsize=(figstyle.COL_SINGLE, 2.7))
-    ax.plot(beta_grid, alpha_static, "-", color=P["black"], lw=1.4,
-            label=r"static fold $\alpha_c(\beta)$ (closed form)")
-    ax.plot(bb, a_fit, "-", color=P["blue"], lw=1.4,
-            label=r"surrogate $\hat\alpha_{\mathrm{dyn}}(\beta)$")
-    ax.plot(beta_grid, alpha_dyn, "o", color=P["vermillion"], ms=3.2,
-            label=r"RK4 dynamic $\alpha_{\mathrm{dyn}}(\beta)$")
-    ax.fill_between(beta_grid, alpha_dyn, alpha_static, color=P["orange"],
-                    alpha=0.18, lw=0)
-    ax.set_xlabel(r"Casimir loading $\beta$")
-    ax.set_ylabel(r"electrostatic bias $\alpha$")
-    ax.set_title(r"Dynamic vs static pull-in boundary ($\zeta=0.1$)")
-    ax.legend(loc="upper right")
-    ax.grid(True)
+    fig, (axa, axb) = plt.subplots(2, 1, figsize=(figstyle.COL_SINGLE, 4.45))
+
+    # ---- (a) dynamic vs static boundary --------------------------------
+    axa.grid(True)
+    axa.fill_between(beta_grid, alpha_dyn, alpha_static, color=P["orange"],
+                     alpha=0.22, lw=0, zorder=1)
+    axa.plot(beta_grid, alpha_static, "-", color=P["black"], lw=1.4, zorder=4,
+             label=r"static fold $\alpha_c(\beta)$ (closed form)")
+
+    # The undamped from-rest curve bounds the threshold from below at every
+    # damping ratio, the static fold bounding it from above; both are closed
+    # form, and the surrogate locates the finite-damping curve between them.
+    try:
+        from src import physics as _ph
+    except ImportError:
+        from . import physics as _ph
+    x_mm = _ph.fold_undamped_x_range()
+    a_mm, b_mm = _ph.fold_undamped(x_mm)
+    axa.plot(b_mm, a_mm, "--", color="#555555", lw=1.1, zorder=4,
+             label=r"undamped bound $\alpha_{\mathrm{dyn}}(\beta;0)$")
+    axa.plot(bb, a_fit, "-", color=P["blue"], lw=1.4, zorder=3,
+             label=r"surrogate $\hat\alpha_{\mathrm{dyn}}(\beta)$")
+    # every second RK4 point, small: the markers are evidence, not the message
+    axa.plot(beta_grid[::2], alpha_dyn[::2], "o", color=P["vermillion"],
+             ms=2.8, mew=0.0, zorder=5,
+             label=r"RK4 $\alpha_{\mathrm{dyn}}(\beta)$ (bisection)")
+
+    # name the band; anchor the leader in the middle of the widest part
+    i_mid = len(beta_grid) // 3
+    b_lab = float(beta_grid[i_mid])
+    a_lab = 0.5 * (float(alpha_dyn[i_mid]) + float(alpha_static[i_mid]))
+    axa.annotate("kinetic-overshoot band\n"
+                 r"$\alpha_c-\alpha_{\mathrm{dyn}}$",
+                 xy=(b_lab, a_lab), xytext=(0.042, 0.115), fontsize=6.8,
+                 ha="center", va="center", color="#333333", linespacing=1.3,
+                 arrowprops=dict(arrowstyle="->", lw=0.7, color="#333333",
+                                 shrinkA=2.0, shrinkB=1.0))
+
+    axa.set_xlim(beta_grid.min(), beta_grid.max())
+    axa.set_ylim(0.0, float(alpha_static.max()) * 1.09)
+    axa.set_xlabel(r"Casimir loading  $\beta$")
+    axa.set_ylabel(r"electrostatic bias  $\alpha$")
+    axa.set_title(rf"(a)  pull-in boundaries at $\zeta={ZETA:g}$", fontsize=8.5,
+                  loc="left")
+    axa.legend(loc="lower left", fontsize=6.6, borderpad=0.35,
+               handletextpad=0.5, labelspacing=0.28)
+
+    # ---- (b) design sensitivity: autograd vs RK4 finite difference ------
+    b_v = np.array([r["beta"] for r in sens_rows])
+    d_sur = np.array([r["dalpha_dyn_dbeta_surrogate"] for r in sens_rows])
+    d_fd = np.array([r["dalpha_dyn_dbeta_rk4_fd"] for r in sens_rows])
+    rel = np.array([r["rel_err"] for r in sens_rows])
+    fd_h = float(sens_rows[0]["fd_h"])
+
+    axb.grid(True)
+    axb.plot(bb, dadb, "-", color=P["blue"], lw=1.4, zorder=3,
+             label=r"surrogate autograd  $d\hat\alpha_{\mathrm{dyn}}/d\beta$")
+    axb.plot(b_v, d_fd, "o", mfc="none", mec=P["black"], mew=1.0, ms=5.5,
+             zorder=5, label=rf"RK4 central FD  ($h={fd_h:g}$)")
+
+    lo = min(dadb.min(), d_fd.min())
+    hi = max(dadb.max(), d_fd.max())
+    span = hi - lo
+    axb.set_xlim(beta_grid.min(), beta_grid.max())
+    axb.set_ylim(lo - 0.58 * span, hi + 0.30 * span)
+    axb.set_xlabel(r"Casimir loading  $\beta$")
+    axb.set_ylabel(r"$d\alpha_{\mathrm{dyn}}/d\beta$")
+    axb.set_title("(b)  design sensitivity, autograd vs RK4",
+                  fontsize=8.5, loc="left")
+    axb.legend(loc="upper left", fontsize=6.6, borderpad=0.35,
+               handletextpad=0.5, labelspacing=0.28)
+
+    # the three validated points, spelled out in the empty lower-right corner
+    rows = [r"autograd / RK4 FD  (rel. err.)"]
+    rows += [rf"$\beta={b:.2f}$:  ${s:.3f}$ / ${f:.3f}$  (${100*r:.2f}\%$)"
+             for b, s, f, r in zip(b_v, d_sur, d_fd, rel)]
+    axb.text(0.975, 0.045, "\n".join(rows), transform=axb.transAxes,
+             ha="right", va="bottom", fontsize=6.2, color="#333333",
+             linespacing=1.45)
+
     fig.tight_layout()
     paths = figstyle.savefig(fig, "fig6_dynamic_boundary")
     plt.close(fig)

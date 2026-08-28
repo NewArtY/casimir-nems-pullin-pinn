@@ -12,7 +12,7 @@ Reproducible computational archive accompanying the article
 |---|---|---|
 | **N. S. Akintsov** | School of Artificial Intelligence and Computer Science, Nantong University, Nantong 226019, China | [0000-0002-1040-1292](https://orcid.org/0000-0002-1040-1292) |
 | **A. P. Nevecheria** | Department of Mathematical and Computer Methods, Kuban State University, Krasnodar 350040, Russia | [0000-0001-6736-4691](https://orcid.org/0000-0001-6736-4691) |
-| **S. N. Andreev** | Department of Radiophotonics, Research Center for Telecommunications, Moscow Institute of Physics and Technology (National Research University), Dolgoprudny 141701, Russia | [0000-0003-3588-2894](https://orcid.org/0000-0003-3588-2894) |
+| **S. N. Andreev** | Joint-Stock Company "Center for Research and Development", Moscow 101000, Russia | [0000-0003-3588-2894](https://orcid.org/0000-0003-3588-2894) |
 | **Qing-Hua Qin** | Institute of Advanced Interdisciplinary Technology, Shenzhen MSU-BIT University, Shenzhen 518172, China | [0000-0003-0948-784X](https://orcid.org/0000-0003-0948-784X) |
 
 ## Abstract
@@ -200,7 +200,7 @@ archive.
 
 > N. S. Akintsov, A. P. Nevecheria, S. N. Andreev, and Q.-H. Qin,
 > "Casimir–Electrostatic NEMS Pull-In: Bifurcation, Phase Diagrams &
-> Physics-Informed Neural Networks" (Version 1.0.0), Zenodo (2026).
+> Physics-Informed Neural Networks" (Version 1.1.0), Zenodo (2026).
 > DOI: [10.5281/zenodo.21269555](https://doi.org/10.5281/zenodo.21269555).
 
 A machine-readable citation is provided in `CITATION.cff`.

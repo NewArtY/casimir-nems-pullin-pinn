@@ -5,7 +5,7 @@
     "dtype": "float64",
     "seed": 42,
     "torch": "2.12.0+cpu",
-    "wall_time_s": 7.05417799949646,
+    "wall_time_s": 11.99532437324524,
     "analytic_fold": "alpha_c(u)=u^2(4-5u)/2, beta_c(u)=u^4(3u-2)/2, u=1-xi_PI",
     "dalpha_c_dbeta_closed_form": "-1/u^2",
     "figure": [
@@ -78,6 +78,42 @@
           "elasticity_analytic": 0.7577705383868965
         }
       }
+    },
+    "V_PI_sensitivities_deviceB": {
+      "V_PI_surrogate_V": 0.33156995940656997,
+      "V_PI_analytic_V": 0.3315699806111915,
+      "operating_point": {
+        "A_um2": 25.0,
+        "d_nm": 50.0,
+        "k_N_per_m": 2.0,
+        "beta": 0.05200503089791015
+      },
+      "components": {
+        "dV_dd": {
+          "surrogate": 40066545.83360928,
+          "analytic_fd": 40066490.32994858,
+          "rel_err": 1.3852888097794739e-06,
+          "unit": "V/m",
+          "elasticity_surrogate": 6.041944497221446,
+          "elasticity_analytic": 6.041935740999983
+        },
+        "dV_dA": {
+          "surrogate": -18679178008.69627,
+          "analytic_fd": -18679155980.860786,
+          "rel_err": 1.1792735981283842e-06,
+          "unit": "V/m^2",
+          "elasticity_surrogate": -1.4083888994442895,
+          "elasticity_analytic": -1.4083871485009753
+        },
+        "dV_dk": {
+          "surrogate": 0.23348972510870342,
+          "analytic_fd": 0.2334894497746376,
+          "rel_err": 1.179214161883265e-06,
+          "unit": "V/(N/m)",
+          "elasticity_surrogate": 1.4083888994442895,
+          "elasticity_analytic": 1.4083871485846848
+        }
+      }
     }
   },
   "demo2_inverse_design": {
@@ -104,9 +140,9 @@
     },
     "convergence": {
       "adam_iters_to_best": 201,
-      "wall_time_to_best_ms": 4560.403347015381,
+      "wall_time_to_best_ms": 6302.762985229492,
       "iters_to_tol": 201,
-      "wall_time_total_ms": 4560.632705688477,
+      "wall_time_total_ms": 6302.995443344116,
       "max_iter": 600,
       "final_loss": 7.742945575217628e-17,
       "tol": 1e-16

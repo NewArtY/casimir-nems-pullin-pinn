@@ -14,7 +14,7 @@ lumped single-degree-of-freedom, quoted rest gap ``d``) this script computes:
         V_PI = sqrt( alpha_c / (alpha/V0^2) ) = sqrt( 2 alpha_c k d^3 /(eps0 A) );
   * the thermally-derated pull-in voltage at T = 300 K, from the leading
     Lifshitz-shifted fold (Casimir term multiplied by [1 + kappa(d) T (1-xi)],
-    kappa(d) = (720 zeta(3)/pi^3) k_B d /(hbar c)), solved with the exact 2x2
+    kappa(d) = (60 zeta(3)/pi^3) k_B d /(hbar c)), solved with the exact 2x2
     linear fold system of ``lifshitz_boundary.fold_boundary_T``.
 
 Devices whose beta exceeds the (temperature-dependent) Casimir ceiling beta*
@@ -206,7 +206,7 @@ def save_outputs(rows):
             "zeta": "1/(2Q)",
             "fold_T0": "alpha_c(u)=u^2(4-5u)/2, beta_c(u)=u^4(3u-2)/2, u=1-xi",
             "V_PI": "sqrt(2 alpha_c k d^3 / (eps0 A))",
-            "lifshitz": "beta -> beta[1 + (720 zeta(3)/pi^3) k_B T (d-x)/(hbar c)]",
+            "lifshitz": "beta -> beta[1 + (60 zeta(3)/pi^3) k_B T (d-x)/(hbar c)]",
             "beta_star_T0": BETA_STAR_T0,
             "T_derated_K": 300.0,
         },

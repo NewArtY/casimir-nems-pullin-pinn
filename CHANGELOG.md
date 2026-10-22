@@ -6,11 +6,15 @@ latest version); each release carries its own version DOI.
 
 | version | date | version DOI |
 | :-- | :-- | :-- |
+| 1.3.0 | 2026-10-22 | `10.5281/zenodo.23575743` |
 | 1.2.0 | 2026-10-22 | `10.5281/zenodo.23555718` |
 | 1.1.0 | 2026-08-28 | `10.5281/zenodo.22142711` |
 | 1.0.0 | 2026-07-09 | `10.5281/zenodo.21269555` |
 
-## 1.3.0 - unreleased (revised Physical Review E manuscript)
+## 1.3.0 - 2026-10-22 (revised Physical Review E manuscript)
+
+Published 2026-10-22 as `10.5281/zenodo.23575743`; the manuscript cites this
+version DOI.
 
 Answers a pre-submission review. No earlier result file is changed except the
 figures and tables listed below.
@@ -66,7 +70,7 @@ figures and tables listed below.
 
 ## 1.2.0 - 2026-10-22 (accompanies the Physical Review E manuscript)
 
-Published 2026-10-22 as `10.5281/zenodo.23555718`; the manuscript cites this
+Published 2026-10-22 as `10.5281/zenodo.23555718`; the previous version of the manuscript cited this
 version DOI. The first attempt to release 1.2.0 failed because `.zenodo.json`
 fixed `"doi"` to the concept DOI; that field is now omitted, so Zenodo mints
 the version DOI itself.

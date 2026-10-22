@@ -1,17 +1,17 @@
 {
   "title": "Casimir-Electrostatic NEMS Pull-In: Bifurcation, Phase Diagrams & Physics-Informed Neural Networks",
   "upload_type": "software",
-  "description": "<p>Reproducible computational archive accompanying the article <em>\"Casimir-Electrostatic Pull-In in Nanomechanical Actuators: Phase Diagrams, Design Sensitivities, and Physics-Informed Neural-Network Surrogates\"</em> (Physical Review Applied, in preparation, 2026).</p><p>The code models the pull-in instability of a parallel-plate nano-electromechanical (NEMS) oscillator driven by both an electrostatic force and the attractive Casimir force. It (i) derives the closed-form saddle-node (fold) bifurcation separating the stable and pull-in regimes in the (electrostatic, Casimir) control plane, (ii) maps the dynamic pull-in phase diagram by deterministic Runge-Kutta integration from rest, (iii) trains physics-informed neural networks (PINNs) that solve the governing ODE, including a pull-in-safe rapidity parametrization for the movable pole and a parametric PINN that learns the fold boundary purely from the force-balance residual, and (iv) computes the finite-temperature Lifshitz correction and the resulting thermal shift of the pull-in voltage. All results, models, logs and the six publication figures regenerate deterministically from a single fixed seed (42), CPU-only, in float64. See README.md and SEEDS.md.</p>",
+  "description": "<p>Reproducible computational archive accompanying the article <em>\"Pull-in from rest under electrostatic and Casimir forces: Exact bounds, merger with the static fold at finite damping, and collapse asymptotics\"</em> (submitted to Physical Review E, 2026).</p><p>The code models the pull-in instability of a parallel-plate nano-electromechanical (NEMS) oscillator driven by both an electrostatic force and the attractive Casimir force. It (i) derives the closed-form saddle-node (fold) bifurcation separating the stable and pull-in regimes in the (electrostatic, Casimir) control plane, (ii) maps the dynamic pull-in threshold for release from rest by deterministic integration, including the numerical checks behind the rigorous bounds on that threshold, (iii) trains physics-informed neural networks (PINNs) that solve the governing ODE, including a pull-in-safe rapidity parametrization for the movable pole and a parametric PINN that learns the fold boundary purely from the force-balance residual, (iv) computes the finite-temperature Lifshitz correction and the resulting thermal shift of the pull-in voltage, and (v) estimates the squeeze-film damping regimes of representative gold actuators (new in 1.2.0). All results, models, logs and the publication figures regenerate deterministically from a single fixed seed (42), CPU-only, in float64. See README.md and SEEDS.md.</p>",
   "access_right": "open",
   "license": "MIT",
-  "doi": "10.5281/zenodo.21269554",
   "keywords": [
     "Casimir effect",
     "NEMS",
     "pull-in instability",
     "physics-informed neural network",
     "bifurcation",
-    "Lifshitz theory"
+    "Lifshitz theory",
+    "squeeze-film damping"
   ],
   "creators": [
     {
@@ -35,6 +35,6 @@
       "affiliation": "Institute of Advanced Interdisciplinary Technology, Shenzhen MSU-BIT University, Shenzhen 518172, China"
     }
   ],
-  "version": "1.1.0",
+  "version": "1.2.0",
   "language": "eng"
 }

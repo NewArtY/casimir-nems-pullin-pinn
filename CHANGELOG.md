@@ -10,7 +10,7 @@ latest version); each release carries its own version DOI.
 | 1.1.0 | 2026-08-28 | `10.5281/zenodo.22142711` |
 | 1.0.0 | 2026-07-09 | `10.5281/zenodo.21269555` |
 
-## 1.2.0 - unreleased (accompanies the Physical Review E manuscript)
+## 1.2.0 - 2026-10-22 (accompanies the Physical Review E manuscript)
 
 Until 1.2.0 is published, the manuscript cites the concept DOI
 `10.5281/zenodo.21269554`, which resolves to the latest version. Publish this

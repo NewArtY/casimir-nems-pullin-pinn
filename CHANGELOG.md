@@ -6,8 +6,38 @@ latest version); each release carries its own version DOI.
 
 | version | date | version DOI |
 | :-- | :-- | :-- |
+| 1.2.0 | not yet released | to be minted on release |
 | 1.1.0 | 2026-08-28 | `10.5281/zenodo.22142711` |
 | 1.0.0 | 2026-07-09 | `10.5281/zenodo.21269555` |
+
+## 1.2.0 - unreleased (accompanies the Physical Review E manuscript)
+
+Until 1.2.0 is published, the manuscript cites the concept DOI
+`10.5281/zenodo.21269554`, which resolves to the latest version. Publish this
+release before the journal submission, so that the concept DOI points at the
+archive the new numbers come from.
+
+### Added
+
+- `src/damping_regimes.py`: squeeze-film damping of the representative
+  devices in air (isothermal Reynolds film on a square plate, Blech 1983,
+  with the rarefied-gas viscosity of Veijola et al. 1995), the zero-bias rest
+  position, the undamped step threshold from that position, the damping
+  `zeta_c` at which the band closes for each device, the pressures at which
+  the gas damping reaches `zeta_c` and `2^(-1/4)`, and the band width in air
+  with a constant and with a gap-dependent damping profile. Writes
+  `results/damping_regimes.json`. Self-checks against the appendix:
+  `zeta_c(0) = 0.395919`, the closed form of McLellan et al., and the band
+  width `1.3482e-2` at `zeta = 0.1`.
+- `make_sm_tables.py` now also emits Table S10 and the device table of the
+  main text, `article/sections/tab_devices.tex`.
+- `run_all.py` stage `damping`.
+
+### Changed
+
+- Figure numbering follows the restructured manuscript: the files keep their
+  names, but `fig6_dynamic_boundary` is now Fig. 3, `fig3_lifshitz_shift`
+  Fig. 4, `fig4_diagnostics` Fig. 5, and `fig5_inverse_design` Fig. 6.
 
 ## 1.1.0 - 2026-08-26
 

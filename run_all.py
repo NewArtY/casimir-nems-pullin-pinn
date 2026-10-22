@@ -80,12 +80,13 @@ STAGES = [
     ("figures",     "src.make_figures",       "main", "Render publication figures (Fig. 1-4)"),
     ("band_scan",   "src.band_scan",          "main", "Band width vs damping, Table S8 (SLOW ~3 min)"),
     ("app_checks",  "src.appendix_checks",    "main", "Numerical checks of Appendix B (SLOW ~5 min)"),
-    ("inverse",     "src.inverse_design",     "main", "Inverse design + autodiff sensitivities (Fig. 5)"),
-    ("dyn_bnd",     "src.dynamic_boundary_design", "run", "No-closed-form dynamic-boundary sensitivity (Fig. 6, SLOW ~2-3 min)"),
+    ("inverse",     "src.inverse_design",     "main", "Inverse design + autodiff sensitivities (Fig. 6)"),
+    ("dyn_bnd",     "src.dynamic_boundary_design", "run", "No-closed-form dynamic-boundary sensitivity (Fig. 3, SLOW ~2-3 min)"),
+    ("damping",     "src.damping_regimes",    "main", "Squeeze-film damping regimes of the devices (Table I, Table S10; SLOW ~15 min)"),
 ]
 
 # Stages that are quick (used by --skip-training which drops 'training').
-SLOW_STAGES = {"training", "dyn_bnd", "app_checks", "band_scan"}
+SLOW_STAGES = {"training", "dyn_bnd", "app_checks", "band_scan", "damping"}
 
 
 def _banner(idx, total, name, desc):

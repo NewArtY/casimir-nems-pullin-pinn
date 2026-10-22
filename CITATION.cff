@@ -9,11 +9,12 @@ abstract: >-
   physics-informed neural networks (PINNs) that solve the governing ODE including a
   pull-in-safe rapidity parametrization for the movable pole and a parametric PINN
   that learns the fold boundary from the force-balance residual, and computes the
-  finite-temperature Lifshitz shift of the pull-in voltage.
+  finite-temperature Lifshitz shift of the pull-in voltage. Version 1.2.0 adds the
+  squeeze-film damping regimes of the representative devices and the numerical
+  checks behind the rigorous results on the threshold for release from rest.
 type: software
-version: "1.1.0"
-date-released: "2026-08-26"
-doi: "10.5281/zenodo.22142711"
+version: "1.2.0"
+doi: "10.5281/zenodo.21269554"
 identifiers:
   - type: doi
     value: "10.5281/zenodo.22142711"
@@ -48,10 +49,10 @@ authors:
     affiliation: "Institute of Advanced Interdisciplinary Technology, Shenzhen MSU-BIT University, Shenzhen 518172, China"
 preferred-citation:
   type: article
-  title: "Casimir-Electrostatic Pull-In in Nanomechanical Actuators: Phase Diagrams, Design Sensitivities, and Physics-Informed Neural-Network Surrogates"
+  title: "Pull-in from rest under electrostatic and Casimir forces: Exact bounds, merger with the static fold at finite damping, and collapse asymptotics"
   year: 2026
-  journal: "Physical Review Applied"
-  notes: "In preparation."
+  journal: "Physical Review E"
+  notes: "Submitted."
   authors:
     - family-names: Akintsov
       given-names: N. S.

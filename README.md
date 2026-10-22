@@ -2,9 +2,9 @@
 
 Reproducible computational archive accompanying the article
 
-> **Casimir–Electrostatic Pull-In Bifurcation in Nonlinear Nanomechanical Oscillators: Phase Diagrams and Physics-Informed Neural-Network Solutions with Relativistic Lifshitz Corrections**
+> **Pull-in from rest under electrostatic and Casimir forces: Exact bounds, merger with the static fold at finite damping, and collapse asymptotics**
 > N. S. Akintsov, A. P. Nevecheria, S. N. Andreev, and Qing-Hua Qin
-> *Physical Review Applied* (in preparation, 2026).
+> submitted to *Physical Review E* (2026).
 
 ## Authors
 
@@ -69,6 +69,14 @@ leading factor `[1 + κ(d) T (1−ξ)]` with `κ(d) = (720 ζ(3)/π³) k_B d /(�
 | `figstyle.py` | Publication figure style (Physical Review column widths, colour-blind-safe Okabe–Ito palette, `savefig` → PDF + 600-dpi PNG). |
 | `make_figures.py` | Pure renderer: loads saved arrays and writes the four figures to `figures/`. Recomputes no physics. |
 | `smoke_test.py` | Quick end-to-end check: exercises the three regimes, verifies the potential identity, writes `results/smoke_results.json`. |
+| `pullin_reference.py` | Adaptive DOP853 reference integrated through to the barrier for the pull-in trajectory (Fig. 1c, the collapse-exponent check). |
+| `device_table.py` | Representative gold actuators: `β`, `V_PI` at 0 K and the classical-limit thermal bound at 300 K; writes `results/device_table.{json,csv}`. |
+| `inverse_design.py` | Autodiff sensitivities and gradient-based inverse design through the fold surrogate, devices A and B (Fig. 6, Tables S5–S6). |
+| `dynamic_boundary_design.py` | From-rest threshold at `ζ=0.1` by bisection, differentiable fit and its autodiff slope against a finite difference (Fig. 3). |
+| `band_scan.py` | Width of the overshoot band against damping at `β=0` (Table S8). |
+| `appendix_checks.py` | Numerical checks behind the barrier theorem of Appendix B: its constant, `ζ_c`, and the departure from the degenerate equilibrium. |
+| `damping_regimes.py` | Squeeze-film damping of the devices in air, rest position, undamped step threshold, `ζ_c` per device, crossover pressures (Table I, Table S10). |
+| `make_sm_tables.py` | Emits the LaTeX of the Supplemental Material tables and of the device table of the main text from `results/` and `logs/`. |
 
 ## Installation
 
@@ -114,7 +122,19 @@ python -m src.pinn_boundary         # 7. parametric PINN boundary (relative impo
                                     #    -> models/pinn_param_boundary.pth,
                                     #       results/pinn_boundary.npz, logs/pinn_boundary.json
 python src/make_figures.py          # 8. figures -> figures/fig{1..4}.{pdf,png}
+python -m src.pullin_reference      # 9. reference through to the barrier
+python -m src.band_scan             # 10. Table S8 (SLOW ~3 min)
+python -m src.appendix_checks       # 11. Appendix B checks (SLOW ~5 min)
+python -m src.inverse_design        # 12. Fig. 6, Tables S5-S6
+python -m src.dynamic_boundary_design  # 13. Fig. 3 (SLOW ~2-3 min)
+python -m src.damping_regimes       # 14. Table I, Table S10 (SLOW ~15 min)
+python src/make_sm_tables.py        # 15. LaTeX tables -> ../article/sections/
 ```
+
+The figure files keep the names they were given before the manuscript was
+restructured: `fig6_dynamic_boundary` is Fig. 3 of the article,
+`fig3_lifshitz_shift` Fig. 4, `fig4_diagnostics` Fig. 5, and
+`fig5_inverse_design` Fig. 6.
 
 > **Note.** `pinn_boundary.py` uses package-relative imports, so it must be run
 > as a module (`python -m src.pinn_boundary`), not as `python src/pinn_boundary.py`.
@@ -139,13 +159,15 @@ contract.
 | PINN trajectory `L∞(ξ)` — pull-in | `2.83 × 10⁻³` | `results/pinn_traj_summary.json` |
 | Pull-in time `τ*` (pull-in regime, DOP853 1e-12) | `≈ 2.6226` | `results/verification_summary.json` |
 | Parametric-PINN boundary vs analytic fold | mean `|Δα| ≲ 1%` of `4/27` | `logs/pinn_boundary.json` |
-| Lifshitz `ΔV_PI/V_PI` at `β=0.03`, `T=100 K` | `−2.88%` | `results/lifshitz_shift_summary.csv` |
-| Lifshitz `ΔV_PI/V_PI` at `β=0.03`, `T=300 K` | `−8.87%` | `results/lifshitz_shift_summary.csv` |
-| Lifshitz `β*` shift, `T=300 K` | `−22.6%` (`0.0819 → 0.0634`) | `results/lifshitz_shift_summary.csv` |
+| Classical-limit Lifshitz bound on `ΔV_PI/V_PI` at `β=0.03`, `T=100 K` | `−0.24%` | `results/lifshitz_shift_summary.csv` |
+| Classical-limit Lifshitz bound on `ΔV_PI/V_PI` at `β=0.03`, `T=300 K` | `−0.71%` | `results/lifshitz_shift_summary.csv` |
+| Classical-limit Lifshitz bound on `β*`, `T=300 K` | `0.0819 → 0.0799` | `results/lifshitz_shift_summary.csv` |
+| Damping at which the band closes, `β=0` | `ζ_c = 0.395919` | `appendix_checks.py`, `damping_regimes.py` |
+| Band width `α_c − α_dyn` at `ζ=0.1`, `β=0` | `1.3482 × 10⁻²` | `results/band_scan.csv` |
 
 Fixed-step RK4 overshoots the movable pole (`ξ > 1`) for every step `h` tested,
 whereas the adaptive reference and the rapidity-PINN remain well posed — this is
-the central methodological point substantiated by `verify.py` and Fig. 4.
+the representational point substantiated by `verify.py` and Fig. 5.
 
 ## Directory layout
 
@@ -192,16 +214,16 @@ archive.
 **Article (in preparation):**
 
 > N. S. Akintsov, A. P. Nevecheria, S. N. Andreev, and Q.-H. Qin,
-> "Casimir–Electrostatic Pull-In in Nanomechanical Actuators: Phase Diagrams,
-> Design Sensitivities, and Physics-Informed Neural-Network Surrogates,"
-> *Physical Review Applied* (in preparation, 2026).
+> "Pull-in from rest under electrostatic and Casimir forces: Exact bounds, merger with the static fold at finite damping, and collapse asymptotics,"
+> submitted to *Physical Review E* (2026).
 
 **Software archive (this repository):**
 
 > N. S. Akintsov, A. P. Nevecheria, S. N. Andreev, and Q.-H. Qin,
 > "Casimir–Electrostatic NEMS Pull-In: Bifurcation, Phase Diagrams &
-> Physics-Informed Neural Networks" (Version 1.1.0), Zenodo (2026).
-> DOI: [10.5281/zenodo.22142711](https://doi.org/10.5281/zenodo.22142711)
-> (version 1.1.0; concept DOI [10.5281/zenodo.21269554](https://doi.org/10.5281/zenodo.21269554) resolves to the latest version).
+> Physics-Informed Neural Networks" (Version 1.2.0), Zenodo (2026).
+> Concept DOI [10.5281/zenodo.21269554](https://doi.org/10.5281/zenodo.21269554),
+> which resolves to the latest version; the version DOI of each release is
+> listed in `CHANGELOG.md`.
 
 A machine-readable citation is provided in `CITATION.cff`.

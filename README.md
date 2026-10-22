@@ -2,7 +2,7 @@
 
 Reproducible computational archive accompanying the article
 
-> **Pull-in from rest under electrostatic and Casimir forces: Exact bounds, merger with the static fold at finite damping, and collapse asymptotics**
+> **Dynamic pull-in under electrostatic and Casimir forces: Bounds, finite-damping merger, and collapse asymptotics**
 > N. S. Akintsov, A. P. Nevecheria, S. N. Andreev, and Qing-Hua Qin
 > submitted to *Physical Review E* (2026).
 
@@ -27,7 +27,7 @@ overshoot moves the dynamic boundary inside the static fold, (iii) trains
 mesh-free **physics-informed neural networks (PINNs)** that solve the governing
 ODE — including a pull-in-safe *rapidity* parametrization that resolves the
 movable pole where fixed-step RK4 fails — and a parametric PINN that learns the
-entire fold boundary directly from the force-balance residual, and (iv) computes
+entire fold boundary directly from the stationarity residual g′ = 0 of the net force, and (iv) computes
 the finite-temperature **Lifshitz** correction and the resulting thermal shift
 of the pull-in voltage. All results, models, logs and the four publication
 figures are regenerated deterministically from a single fixed seed.
@@ -65,7 +65,7 @@ leading factor `[1 + κ(d) T (1−ξ)]` with `κ(d) = (720 ζ(3)/π³) k_B d /(�
 | `verify.py` | Verification study: adaptive DOP853 (`rtol=atol=1e-12`) ground truth, fixed-step RK4 step-study near the movable pole, PINN accuracy table (regular vs near-pull-in). |
 | `phase_diagram.py` | Vectorised RK4 sweep over a 200×200 (α, β) grid from rest; dynamic pull-in mask, `τ_PI` map, overlay of the analytic static fold and the static/dynamic boundary gap. |
 | `lifshitz_boundary.py` | Finite-`T` fold boundary from the `g = g' = 0` linear system; `T=0` validation vs the closed form; thermal shift of `α_c`, `V_PI`, and `β*`. |
-| `pinn_boundary.py` | Parametric physics-informed surrogate `u*_θ(α,β)` trained purely on the force-balance residual; emergent pull-in boundary (zero level set of the fold indicator) vs the analytic fold. Uses **relative imports** — invoke as `python -m src.pinn_boundary`. |
+| `pinn_boundary.py` | Parametric physics-informed surrogate `u*_θ(α,β)` (gap at the minimum of the net force) trained purely on the stationarity residual g′ = 0; emergent pull-in boundary (zero level set of the fold indicator) vs the analytic fold. Uses **relative imports** — invoke as `python -m src.pinn_boundary`. |
 | `figstyle.py` | Publication figure style (Physical Review column widths, colour-blind-safe Okabe–Ito palette, `savefig` → PDF + 600-dpi PNG). |
 | `make_figures.py` | Pure renderer: loads saved arrays and writes the four figures to `figures/`. Recomputes no physics. |
 | `smoke_test.py` | Quick end-to-end check: exercises the three regimes, verifies the potential identity, writes `results/smoke_results.json`. |
@@ -73,9 +73,12 @@ leading factor `[1 + κ(d) T (1−ξ)]` with `κ(d) = (720 ζ(3)/π³) k_B d /(�
 | `device_table.py` | Representative gold actuators: `β`, `V_PI` at 0 K and the classical-limit thermal bound at 300 K; writes `results/device_table.{json,csv}`. |
 | `inverse_design.py` | Autodiff sensitivities and gradient-based inverse design through the fold surrogate, devices A and B (Fig. 6, Tables S5–S6). |
 | `dynamic_boundary_design.py` | From-rest threshold at `ζ=0.1` by bisection, differentiable fit and its autodiff slope against a finite difference (Fig. 3). |
-| `band_scan.py` | Width of the overshoot band against damping at `β=0` (Table S8). |
+| `band_scan.py` | Width of the overshoot band against damping at `β=0` by saddle crossing within a horizon (superseded for Table S8 by `threshold_checks.py`; kept as a cross-check). |
 | `appendix_checks.py` | Numerical checks behind the barrier theorem of Appendix B: its constant, `ζ_c`, and the departure from the degenerate equilibrium. |
 | `damping_regimes.py` | Squeeze-film damping of the devices in air, rest position, undamped step threshold, `ζ_c` per device, crossover pressures (Table I, Table S10). |
+| `threshold_checks.py` | From-rest threshold by three independent methods (fixed-step RK4, horizon-free certificates, backward stable manifold), band toward `ζ_c`, slopes, `ζ_c(β)`, `ζ_0(β)`, counterexample to the limit of Flores (2017), delayed pull-in of Fig. 1(b) (Tables S8, S11, S12). |
+| `pinn_checks.py` | Residual audit of the pull-in network on a dense grid, Gronwall horizons, raw-parametrization ablation (Table II, Appendix B). |
+| `matsubara_bound.py` | Numerical check of the zero-frequency bound on the thermal Casimir pressure of ideal mirrors (Appendix A). |
 | `make_sm_tables.py` | Emits the LaTeX of the Supplemental Material tables and of the device table of the main text from `results/` and `logs/`. |
 
 ## Installation
@@ -128,7 +131,12 @@ python -m src.appendix_checks       # 11. Appendix B checks (SLOW ~5 min)
 python -m src.inverse_design        # 12. Fig. 6, Tables S5-S6
 python -m src.dynamic_boundary_design  # 13. Fig. 3 (SLOW ~2-3 min)
 python -m src.damping_regimes       # 14. Table I, Table S10 (SLOW ~15 min)
-python src/make_sm_tables.py        # 15. LaTeX tables -> ../article/sections/
+python -m src.threshold_checks fast # 15. Tables S8, S11 (~5 min)
+python -m src.threshold_checks zetac  # 16. Table S12 (SLOW, ~1 h; can be split:
+                                    #     zetac 0.0,0.03,0.06 etc. in parallel)
+python -m src.pinn_checks           # 17. residual audit and ablation (~4 min)
+python -m src.matsubara_bound       # 18. Appendix A bound check (seconds)
+python src/make_sm_tables.py        # 19. LaTeX tables -> ../article/sections/
 ```
 
 The figure files keep the names they were given before the manuscript was
@@ -155,15 +163,17 @@ contract.
 | Electrostatic fold endpoint `α_c` at `β=0` | `4/27 ≈ 0.148148` | `bifurcation.py` |
 | Casimir fold endpoint `β*` at `α=0` | `256/3125 ≈ 0.081920` | `bifurcation.py` |
 | PINN trajectory `L∞(ξ)` — stable | `1.05 × 10⁻³` | `results/pinn_traj_summary.json` |
-| PINN trajectory `L∞(ξ)` — growing | `1.95 × 10⁻³` | `results/pinn_traj_summary.json` |
+| PINN trajectory `L∞(ξ)` — delayed pull-in (archive name `growing`), window `[0,30]` | `1.95 × 10⁻³` | `results/pinn_traj_summary.json` |
 | PINN trajectory `L∞(ξ)` — pull-in | `2.83 × 10⁻³` | `results/pinn_traj_summary.json` |
 | Pull-in time `τ*` (pull-in regime, DOP853 1e-12) | `≈ 2.6226` | `results/verification_summary.json` |
 | Parametric-PINN boundary vs analytic fold | mean `|Δα| ≲ 1%` of `4/27` | `logs/pinn_boundary.json` |
-| Classical-limit Lifshitz bound on `ΔV_PI/V_PI` at `β=0.03`, `T=100 K` | `−0.24%` | `results/lifshitz_shift_summary.csv` |
-| Classical-limit Lifshitz bound on `ΔV_PI/V_PI` at `β=0.03`, `T=300 K` | `−0.71%` | `results/lifshitz_shift_summary.csv` |
-| Classical-limit Lifshitz bound on `β*`, `T=300 K` | `0.0819 → 0.0799` | `results/lifshitz_shift_summary.csv` |
+| Zero-frequency bound on the thermal `ΔV_PI/V_PI` (ideal conductors) at `β=0.03`, `T=100 K` | `−0.24%` | `results/lifshitz_shift_summary.csv` |
+| Zero-frequency bound on the thermal `ΔV_PI/V_PI` (ideal conductors) at `β=0.03`, `T=300 K` | `−0.71%` | `results/lifshitz_shift_summary.csv` |
+| Zero-frequency bound on `β*`, `T=300 K` | `0.0819 → 0.0800` | `results/lifshitz_shift_summary.csv` |
 | Damping at which the band closes, `β=0` | `ζ_c = 0.395919` | `appendix_checks.py`, `damping_regimes.py` |
-| Band width `α_c − α_dyn` at `ζ=0.1`, `β=0` | `1.3482 × 10⁻²` | `results/band_scan.csv` |
+| Band width `α_c − α_dyn` at `ζ=0.1`, `β=0` | `1.3482 × 10⁻²` | `results/threshold_checks.json` |
+| Threshold `α_dyn` at `ζ=0.1`, `β=0`, three methods | `0.1346660882` (spread `≤ 3 × 10⁻⁸`) | `results/threshold_checks.json` |
+| Delayed pull-in of Fig. 1(b), contact time | `τ_PI = 38.84` | `results/threshold_checks.json` |
 
 Fixed-step RK4 overshoots the movable pole (`ξ > 1`) for every step `h` tested,
 whereas the adaptive reference and the rapidity-PINN remain well posed — this is
@@ -214,7 +224,7 @@ archive.
 **Article (in preparation):**
 
 > N. S. Akintsov, A. P. Nevecheria, S. N. Andreev, and Q.-H. Qin,
-> "Pull-in from rest under electrostatic and Casimir forces: Exact bounds, merger with the static fold at finite damping, and collapse asymptotics,"
+> "Dynamic pull-in under electrostatic and Casimir forces: Bounds, finite-damping merger, and collapse asymptotics,"
 > submitted to *Physical Review E* (2026).
 
 **Software archive (this repository):**

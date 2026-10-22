@@ -19,11 +19,13 @@ float64.  See SEEDS.md for the full determinism contract.
 
 Runtime (reference machine, CPU-only)
 -------------------------------------
-The three quick analysis/verification stages and the figure renderer finish in
-seconds.  The single expensive stage is PINN trajectory training
-(``train_trajectories``), which takes a few minutes (Adam + L-BFGS for three
-regimes; ~5-8 min total on a typical laptop CPU).  The parametric-boundary PINN
-(``pinn_boundary``) trains in a few seconds.  Expect ~6-9 minutes end-to-end.
+The quick analysis stages and the figure renderer finish in seconds to a
+minute.  PINN trajectory training (``train_trajectories``) takes ~5-8 min, the
+squeeze-film stage (``damping``) ~15 min, and the threshold checks
+(``thr_checks``) one to two hours, dominated by the zeta_c(beta) scan; that scan
+can be split over processes (``python -m src.threshold_checks zetac <betas>``).
+Expect two to three hours end-to-end; ``--skip-training`` skips every slow
+stage and keeps it to minutes.
 
 Options
 -------
@@ -75,6 +77,7 @@ STAGES = [
     ("verify",      "src.verify",             "main", "Verification study: PINN vs RK4 near pull-in"),
     ("phase",       "src.phase_diagram",      "run",  "Pull-in phase diagram (vectorised RK4 sweep)"),
     ("lifshitz",    "src.lifshitz_boundary",  "main", "Thermal (Lifshitz) fold-boundary shift"),
+    ("devices",     "src.device_table",       "main", "Representative devices: beta, V_PI, thermal bound (Table S7)"),
     ("pinn_bnd",    "src.pinn_boundary",      "main", "Parametric physics-informed pull-in boundary"),
     ("pullin_ref",  "src.pullin_reference",   "main", "Adaptive reference through to the barrier (Fig. 1c)"),
     ("figures",     "src.make_figures",       "main", "Render publication figures (Fig. 1-4)"),
@@ -83,10 +86,19 @@ STAGES = [
     ("inverse",     "src.inverse_design",     "main", "Inverse design + autodiff sensitivities (Fig. 6)"),
     ("dyn_bnd",     "src.dynamic_boundary_design", "run", "No-closed-form dynamic-boundary sensitivity (Fig. 3, SLOW ~2-3 min)"),
     ("damping",     "src.damping_regimes",    "main", "Squeeze-film damping regimes of the devices (Table I, Table S10; SLOW ~15 min)"),
+    ("thr_checks",  "src.threshold_checks",   "main", "Threshold by three methods, band, slopes, zeta_c(beta) (Tables S8, S11, S12; SLOW ~1-2 h)"),
+    ("pinn_checks", "src.pinn_checks",        "main", "PINN residual audit and raw-parametrization ablation (SLOW ~4 min)"),
+    ("matsubara",   "src.matsubara_bound",    "main", "Zero-frequency bound on the thermal Casimir pressure (Appendix A)"),
+    ("app_numbers", "src.appendix_numbers",   "main", "Remaining numbers of Sec. III and Appendix B (SLOW ~10 min)"),
+    ("surr_valid",  "src.surrogate_validation", "main", "Dense validation of the damped-threshold surrogate slope (SLOW ~5 min)"),
+    ("sm_tables",   "src.make_sm_tables",     "main", "Emit the LaTeX tables of the SM and of the main text"),
+    ("conductivity","src.conductivity_estimate","main", "Finite-conductivity estimate for the devices (plasma model)"),
 ]
 
 # Stages that are quick (used by --skip-training which drops 'training').
-SLOW_STAGES = {"training", "dyn_bnd", "app_checks", "band_scan", "damping"}
+SLOW_STAGES = {"training", "dyn_bnd", "app_checks", "band_scan", "damping",
+               "thr_checks", "pinn_checks", "app_numbers",
+               "surr_valid"}
 
 
 def _banner(idx, total, name, desc):

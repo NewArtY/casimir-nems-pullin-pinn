@@ -44,12 +44,39 @@ def figure1():
     """
     regimes = [
         ("stable", "stable", "traj_stable.npz"),
-        ("growing", "growing", "traj_growing.npz"),
+        ("growing", "delayed pull-in", "traj_growing.npz"),
         ("pullin", "pull-in", "traj_pullin.npz"),
     ]
     # tau_PI for the pull-in case comes from the DOP853 reference verification.
     with open(os.path.join(RESULTS, "verification_summary.json")) as fh:
         tau_pi = json.load(fh)["reference"]["tau_star"]
+
+    # The "growing" point lies above the fold, alpha > alpha_c(beta): it has
+    # no equilibrium and collapses after a slow passage near the fold point.
+    # Its network was trained on [0, 30], before the collapse, so the
+    # reference is integrated here through to contact and the network is
+    # drawn only on its window.
+    from scipy.integrate import solve_ivp
+    from scipy.optimize import brentq
+    dg = _load("traj_growing.npz")
+    ag, bg, zg = float(dg["alpha"]), float(dg["beta"]), float(dg["zeta"])
+
+    def _rhs_g(t, y):
+        u = 1.0 - y[0]
+        return [y[1], -2 * zg * y[1] - y[0] + ag / u ** 2 + bg / u ** 4]
+
+    def _contact(t, y):
+        return y[0] - (1.0 - 1e-4)
+    _contact.terminal = True
+    sg = solve_ivp(_rhs_g, (0.0, 500.0), [0.0, 0.0], method="DOP853",
+                   rtol=1e-12, atol=1e-14, events=_contact, dense_output=True)
+    tau_g = float(sg.t_events[0][0])
+    tg_full = np.linspace(0.0, tau_g, 6000)
+    xg_full = sg.sol(tg_full)[0]
+    u_fg = brentq(lambda u: 0.5 * u ** 4 * (3 * u - 2) - bg, 2 / 3, 0.8,
+                  xtol=1e-15)
+    xi_fg = 1.0 - u_fg
+    tau_mark = {"growing": tau_g, "pullin": tau_pi}
 
     ref_c = fs.PALETTE["black"]
     pinn_c = fs.PALETTE["vermillion"]
@@ -68,7 +95,7 @@ def figure1():
     # anchor of the parameter block inside each panel, chosen to sit in the
     # empty half of that particular trajectory (axes fractions).
     ptxt_pos = {"stable": (0.34, 0.62, "left", "center"),
-                "growing": (0.60, 0.34, "left", "center"),
+                "growing": (0.30, 0.74, "left", "top"),
                 "pullin": (0.05, 0.74, "left", "top")}
 
     for k, ((key, title, _f), lab) in enumerate(zip(regimes, labels)):
@@ -84,6 +111,13 @@ def figure1():
         if key == "pullin":
             full = _load("traj_pullin_ref_full.npz")
             ax.plot(full["t"], full["xi"], "-", color=ref_c, lw=1.3, zorder=3)
+        elif key == "growing":
+            ax.plot(tg_full, xg_full, "-", color=ref_c, lw=1.3, zorder=3)
+            ax.axhline(xi_fg, ls="--", color=fs.PALETTE["grey"], lw=0.8,
+                       zorder=1)
+            ax.text(0.03, xi_fg, r"fold point $\xi_f$", fontsize=6.8,
+                    transform=ax.get_yaxis_transform(), ha="left",
+                    va="bottom", color="#555555")
         else:
             ax.plot(t, xr, "-", color=ref_c, lw=1.3, zorder=3)
         ax.plot(t, xp, "--", color=pinn_c, lw=1.3, zorder=4)
@@ -103,18 +137,20 @@ def figure1():
         ax.text(px, py, ptxt, transform=ax.transAxes, va=pva, ha=pha,
                 fontsize=7.5, linespacing=1.35)
 
-        if key == "pullin":
+        if key in ("pullin", "growing"):
+            tm = tau_mark[key]
             # the barrier xi = 1 is a reference level, not a data curve
             ax.axhline(1.0, ls="-", color=fs.PALETTE["grey"], lw=0.9, zorder=1)
-            ax.text(0.05, 1.0, r"pull-in barrier  $\xi=1$", fontsize=6.8,
-                    transform=ax.get_yaxis_transform(), ha="left", va="bottom",
-                    color="#555555")
-            ax.axvline(tau_pi, ls=":", color=fs.PALETTE["blue"], lw=1.1, zorder=2)
-            ax.text(tau_pi, 0.06, r"$\tau_{\mathrm{PI}}$", color=fs.PALETTE["blue"],
+            if key == "pullin":
+                ax.text(0.05, 1.0, r"pull-in barrier  $\xi=1$", fontsize=6.8,
+                        transform=ax.get_yaxis_transform(), ha="left",
+                        va="bottom", color="#555555")
+            ax.axvline(tm, ls=":", color=fs.PALETTE["blue"], lw=1.1, zorder=2)
+            ax.text(tm, 0.06, r"$\tau_{\mathrm{PI}}$", color=fs.PALETTE["blue"],
                     fontsize=7.5, ha="right", va="bottom", rotation=90)
             ax.set_ylim(0.0, 1.12)
-            ax.set_xlim(0.0, tau_pi * 1.02)
-            axe.axvline(tau_pi, ls=":", color=fs.PALETTE["blue"], lw=1.1,
+            ax.set_xlim(0.0, tm * 1.02)
+            axe.axvline(tm, ls=":", color=fs.PALETTE["blue"], lw=1.1,
                         zorder=2)
         else:
             ax.set_ylim(bottom=0.0)
@@ -328,7 +364,7 @@ def figure3():
                handletextpad=0.5)
 
     # zoom inset on the beta-axis intercept beta*(T): the three temperatures
-    # are resolved only here (0.0819 -> 0.0799 between 0 K and 300 K).
+    # are resolved only here (0.0819 -> 0.0800 between 0 K and 300 K).
     axin = axa.inset_axes([0.455, 0.455, 0.51, 0.47])
     for t in tags:
         axin.plot(*branch(t), color=col[t], ls=lsty[t], lw=1.1, label=tlab[t])
@@ -405,7 +441,7 @@ def figure3():
     axb.set_ylim(ylo, 3.0 * ymax)
     axb.set_xlabel(r"Casimir number  $\beta$")
     axb.set_ylabel(r"$-\Delta V_{\mathrm{PI}}/V_{\mathrm{PI}}$  (%)")
-    axb.set_title(r"(b)  thermal shift of the pull-in voltage", fontsize=8.5,
+    axb.set_title(r"(b)  bound on the thermal shift of $V_{\mathrm{PI}}$", fontsize=8.5,
                   loc="left")
     axb.text(0.052, 0.30 * ymax, r"$V_{\mathrm{PI}}\!\to\!0$" "\n"
              r"at $\beta^{*}(T)$", fontsize=6.4, ha="left", va="center",
@@ -430,7 +466,7 @@ def figure4():
     # ---- (a) training loss curves --------------------------------------
     reg = [
         ("stable", "stable", fs.PALETTE["blue"], "o"),
-        ("growing", "growing", fs.PALETTE["vermillion"], "s"),
+        ("growing", "delayed pull-in", fs.PALETTE["vermillion"], "s"),
         ("pullin", "pull-in", fs.PALETTE["green"], "^"),
     ]
     # The three runs hand over to L-BFGS at DIFFERENT iterations (config

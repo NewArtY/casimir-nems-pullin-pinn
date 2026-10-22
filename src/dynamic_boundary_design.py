@@ -352,7 +352,8 @@ def run():
     return payload
 
 
-def _make_figure(beta_grid, alpha_dyn, alpha_static, net, sens_rows):
+def _make_figure(beta_grid, alpha_dyn, alpha_static, net, sens_rows,
+                 dense=None):
     """(a) the two boundaries and the band between them; (b) the design
     sensitivity dalpha_dyn/dbeta the section actually claims, surrogate autograd
     against the independent RK4 central finite difference."""
@@ -434,30 +435,40 @@ def _make_figure(beta_grid, alpha_dyn, alpha_static, net, sens_rows):
     fd_h = float(sens_rows[0]["fd_h"])
 
     axb.grid(True)
+    if dense is not None:
+        # exact slope of the separatrix construction, and a cubic spline
+        # through the same 33 RK4 points as the network
+        axb.plot(dense["beta"], dense["separatrix"], "-", color=P["black"],
+                 lw=2.2, alpha=0.35, zorder=2,
+                 label="separatrix slope (Richardson)")
+        axb.plot(dense["beta"], dense["spline"], "--", color=P["green"],
+                 lw=1.1, zorder=4, label="cubic spline of the RK4 points")
     axb.plot(bb, dadb, "-", color=P["blue"], lw=1.4, zorder=3,
-             label=r"surrogate autograd  $d\hat\alpha_{\mathrm{dyn}}/d\beta$")
+             label=r"network autograd  $d\hat\alpha_{\mathrm{dyn}}/d\beta$")
     axb.plot(b_v, d_fd, "o", mfc="none", mec=P["black"], mew=1.0, ms=5.5,
              zorder=5, label=rf"RK4 central FD  ($h={fd_h:g}$)")
 
     lo = min(dadb.min(), d_fd.min())
     hi = max(dadb.max(), d_fd.max())
+    if dense is not None:
+        lo = min(lo, float(np.min(dense["separatrix"])))
+        hi = max(hi, float(np.max(dense["separatrix"])))
     span = hi - lo
     axb.set_xlim(beta_grid.min(), beta_grid.max())
-    axb.set_ylim(lo - 0.58 * span, hi + 0.30 * span)
+    axb.set_ylim(lo - 0.10 * span, hi + 0.62 * span)
     axb.set_xlabel(r"Casimir loading  $\beta$")
     axb.set_ylabel(r"$d\alpha_{\mathrm{dyn}}/d\beta$")
-    axb.set_title("(b)  design sensitivity, autograd vs RK4",
+    axb.set_title("(b)  slope of the damped threshold",
                   fontsize=8.5, loc="left")
-    axb.legend(loc="upper left", fontsize=6.6, borderpad=0.35,
-               handletextpad=0.5, labelspacing=0.28)
-
-    # the three validated points, spelled out in the empty lower-right corner
-    rows = [r"autograd / RK4 FD  (rel. err.)"]
-    rows += [rf"$\beta={b:.2f}$:  ${s:.3f}$ / ${f:.3f}$  (${100*r:.2f}\%$)"
-             for b, s, f, r in zip(b_v, d_sur, d_fd, rel)]
-    axb.text(0.975, 0.045, "\n".join(rows), transform=axb.transAxes,
-             ha="right", va="bottom", fontsize=6.2, color="#333333",
-             linespacing=1.45)
+    axb.legend(loc="upper right", fontsize=6.3, borderpad=0.35,
+               handletextpad=0.5, labelspacing=0.25, ncol=1)
+    if dense is None:
+        rows = [r"autograd / RK4 FD  (rel. err.)"]
+        rows += [rf"$\beta={b:.2f}$:  ${s:.3f}$ / ${f:.3f}$  (${100*r:.2f}\%$)"
+                 for b, s, f, r in zip(b_v, d_sur, d_fd, rel)]
+        axb.text(0.975, 0.045, "\n".join(rows), transform=axb.transAxes,
+                 ha="right", va="bottom", fontsize=6.2, color="#333333",
+                 linespacing=1.45)
 
     fig.tight_layout()
     paths = figstyle.savefig(fig, "fig6_dynamic_boundary")

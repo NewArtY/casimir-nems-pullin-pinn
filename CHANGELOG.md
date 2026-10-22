@@ -6,16 +6,16 @@ latest version); each release carries its own version DOI.
 
 | version | date | version DOI |
 | :-- | :-- | :-- |
-| 1.2.0 | not yet released | to be minted on release |
+| 1.2.0 | 2026-10-22 | `10.5281/zenodo.23555718` |
 | 1.1.0 | 2026-08-28 | `10.5281/zenodo.22142711` |
 | 1.0.0 | 2026-07-09 | `10.5281/zenodo.21269555` |
 
 ## 1.2.0 - 2026-10-22 (accompanies the Physical Review E manuscript)
 
-Until 1.2.0 is published, the manuscript cites the concept DOI
-`10.5281/zenodo.21269554`, which resolves to the latest version. Publish this
-release before the journal submission, so that the concept DOI points at the
-archive the new numbers come from.
+Published 2026-10-22 as `10.5281/zenodo.23555718`; the manuscript cites this
+version DOI. The first attempt to release 1.2.0 failed because `.zenodo.json`
+fixed `"doi"` to the concept DOI; that field is now omitted, so Zenodo mints
+the version DOI itself.
 
 ### Added
 

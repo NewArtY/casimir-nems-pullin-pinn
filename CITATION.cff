@@ -14,8 +14,12 @@ abstract: >-
   checks behind the rigorous results on the threshold for release from rest.
 type: software
 version: "1.2.0"
-doi: "10.5281/zenodo.21269554"
+doi: "10.5281/zenodo.23555718"
+date-released: "2026-10-22"
 identifiers:
+  - type: doi
+    value: "10.5281/zenodo.23555718"
+    description: "Version DOI of release 1.2.0."
   - type: doi
     value: "10.5281/zenodo.22142711"
     description: "Version DOI of release 1.1.0."

@@ -222,8 +222,9 @@ archive.
 > N. S. Akintsov, A. P. Nevecheria, S. N. Andreev, and Q.-H. Qin,
 > "Casimir–Electrostatic NEMS Pull-In: Bifurcation, Phase Diagrams &
 > Physics-Informed Neural Networks" (Version 1.2.0), Zenodo (2026).
-> Concept DOI [10.5281/zenodo.21269554](https://doi.org/10.5281/zenodo.21269554),
-> which resolves to the latest version; the version DOI of each release is
+> Version DOI [10.5281/zenodo.23555718](https://doi.org/10.5281/zenodo.23555718);
+> concept DOI [10.5281/zenodo.21269554](https://doi.org/10.5281/zenodo.21269554),
+> which resolves to the latest version. The version DOI of each release is
 > listed in `CHANGELOG.md`.
 
 A machine-readable citation is provided in `CITATION.cff`.
